@@ -108,6 +108,7 @@ dist
 
 # Build folder
 public/
+dist/
 
 # Cypress screenshots
 cypress/screenshots
