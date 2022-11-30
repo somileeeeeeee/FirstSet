@@ -1,5 +1,8 @@
+
+const styleCss = require('./css/style.css');
+
 const greeting: string = 'Hello World!';
 alert(greeting);
 
-//var h11 = document.querySelector("h1");
-//h11.classList.add("mystyle")
+const h11 = document.getElementsByTagName("h1")[0];
+h11.classList.add("mystyle")
