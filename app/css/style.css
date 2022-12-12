@@ -1,3 +1,149 @@
-.mystyle {
+/* .mystyle {
   background-color: red;
+} */
+/*  */
+:root{
+  --right_screen_width: 264px;
+  --main_screen_border: 2px solid white;
+  --right_info_height: 360px;
+}
+
+* {
+  color: white;
+  text-decoration: none; 
+}
+
+.l_item {
+  height:90vh;
+}
+
+.r_item {
+  background: grey;
+  display: flex;
+  flex-flow: column;
+}
+
+.btn_area {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+}
+
+li {
+  border-top: 1px solid white;
+  border-right: 1px solid white;
+}
+
+ .btn_item {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  flex-flow: column;
+  text-align: center;
+  font-size: x-small;
+} 
+
+.menubar {
+  display: flex;
+  padding-left: 0;
+  margin: 0;
+  list-style: none;
+
+}
+
+.btn_item > .btn {
+  display: block;
+  margin: 2px auto 4px auto;
+  line-height: 20px;
+  font-size: small;
+
+}
+
+img.btn {
+  width: 30px;
+}
+
+a:hover { 
+  color: aquamarine;
+}
+
+
+/* 클릭 시 메뉴 버튼 활성화 */
+a:focus {
+  background-color: black;
+  color: aquamarine;
+  border: 1px solid aqua;
+  
+}
+
+.mini_map {
+  border: var(--main_screen_border);
+}
+
+.info_div {
+  border: var(--main_screen_border);
+}
+
+.container {
+  background: yellow;
+  height:100vh;
+  position: relative;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.hd_item {
+  background: #3C6395;
+  color: white;
+}
+
+.main_screen {
+  display: flex;
+}
+
+.left_screen {
+  float: left;
+  flex-grow: 1;
+  border: var(--main_screen_border);
+}
+
+.right_screen {
+  float: right;
+  width: var(--right_screen_width);
+  display: flex;
+  flex-flow: column;
+  border: var(--main_screen_border);
+}
+
+.header .hd_item.item1 {
+  width: 20%;
+}
+
+.header .hd_item.item2 {
+  width: 60%;
+  text-align : center;
+}
+
+.header .hd_item.item3 {
+  width: 20%;
+  text-align : right;
+}
+
+.left_screen .l_item.item4 {
+  text-align : right;
+}
+
+.right_screen .r_item.item5 {
+  flex: 1 1 auto;
+  text-align : right;
+  border: var(--main_screen_border);
+}
+
+.right_screen .r_item.item6 {
+  flex: 0 1 var(--right_info_height);
+  text-align : right;
+  border: var(--main_screen_border);
 }

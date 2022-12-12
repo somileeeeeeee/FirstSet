@@ -4,10 +4,114 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
         <title>Document</title>
     </head>
+    
     <body>
-        <h1 class="mystyle">Hello World!</h1>
-        <!--<script src="../dist/main.js"></script>-->
+    <!-- <script src="./main.js"></script> -->
+    <article class="container">
+        <div class="header">
+            <div class="hd_item item1">12:00 PM Fri Sep 6</div>
+            <div class="hd_item item2">FLIGTH</div>
+            <div class="hd_item item3">100%</div>      
+        </div>
+
+        <div class="main_screen">
+            <div class="left_screen">
+            <div id="cesiumContainer" class="l_item item4"></div>
+            </div>
+
+            <div class="right_screen">
+            <div id="vMap" class="r_item item5">
+
+                <div class="btn_area">
+                <!-- menubar 구성은 ul li 로 -->
+                <ul class="menubar upper_menubar">
+                    <li>
+                    <a class="btn_item" href="#">
+                        <img src="assets/icons/vport.svg" class="btn">
+                        V-PORT
+                    </a>
+                    </li>
+
+                    <li>
+                    <a class="btn_item" href="#">
+                        <img src="./assets/icons/tfr.svg" class="btn">
+                        TFR
+                    </a>
+                    </li>
+
+                    <li>
+                    <a class="btn_item" href="#">
+                        <img src="assets/icons/route.svg" class="btn">
+                        ROUTE
+                    </a>
+                    </li>
+
+                    <li>
+                    <a class="btn_item" href="#">
+                        <img src="assets/icons/TRAFFIC.svg" class="btn">
+                        TRAFFIC
+                    </a>
+                    </li>
+
+                    <li>
+                    <a class="btn_item" href="#">
+                        <img src="assets/icons/menu.svg" class="btn">
+                        MORE
+                    </a>
+                    </li>
+                </ul>
+                </div>
+
+                <div class="mini_map"></div>
+            </div>
+
+            <div class="r_item item6">
+                <div class="btn_area">
+                <!-- menubar 구성은 ul li 로 -->
+                <ul class="menubar lower_menubar">
+                    <li>
+                    <a class="btn_item" href="#">
+                        <img src="assets/icons/search.svg" class="btn">
+                        POI
+                    </a>
+                    </li>
+
+                    <li>
+                    <a class="btn_item" href="#">
+                        <img src="assets/icons/flightpln.svg" class="btn">
+                        F-PLN
+                    </a>
+                    </li>
+
+                    <li>
+                    <a class="btn_item" href="#">
+                        <img src="assets/icons/flightinfo.svg" class="btn">
+                        F-INFO
+                    </a>
+                    </li>
+
+                    <li>
+                    <a class="btn_item" href="#">
+                        <img src="assets/icons/message.svg" class="btn btn_psu">
+                        PSU
+                    </a>
+                    </li>
+
+                    <li>
+                    <a class="btn_item" href="#">
+                        <img src="assets/icons/menu.svg" class="btn">
+                        T.B.D
+                    </a>
+                    </li>
+                </ul>
+                </div>
+                <div class="info_div"></div>
+            </div>
+            </div>  
+
+        </div>
     </body>
 </html>
