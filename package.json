@@ -2,7 +2,7 @@
     "name": "firstset",
     "version": "1.0.0",
     "description": "",
-    "main": "index.js",
+    "main": "fullscreen.js",
     "scripts": {
         "build": "webpack",
         "start": "webpack serve --open",

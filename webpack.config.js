@@ -8,7 +8,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     mode: 'development',
-    entry: './app/index.js',
+    entry: './app/fullscreen.js',
     output: {
         filename: 'main.js',
         path: `${__dirname}/dist`,
@@ -19,15 +19,19 @@ module.exports = {
     resolve: {
         fallback: { "https": false, "zlib": false, "http": false, "url": false },
         mainFiles: ['index', 'Cesium'],
-        extensions: [".tsx", ".ts", ".js", ".jsx"],
-        alias: {                                // 
-            root: __dirname,                      // <- 요 부분이 root,  
-            src: path.resolve(__dirname, "src"),  //  경로의 시작점을 알려주는 코드이다.
-          },
+        // extensions: [".tsx", ".ts", ".js", ".jsx"],
+        // alias: {                                // 
+        //     root: __dirname,                      // <- 요 부분이 root,  
+        //     src: path.resolve(__dirname, "app"),  //  경로의 시작점을 알려주는 코드이다.
+        //   },
     },
     
     devServer: {
-        static: './dist'
+        static: './dist',
+        https: {
+            key: "./example.com+5-key.pem", // https 인증서
+            cert: "./example.com+5.pem"
+          }
     },
     module: {
         rules: [
@@ -46,23 +50,26 @@ module.exports = {
                 test: /\.png|gif|jpg|jpeg|svg|xml|json$/,
                 use: [ 'url-loader' ]
             },
-            {
-                test: /\.html$/,
-                exclude: /node_modules/,
-                use: {loader: 'html-loader'}
-            },
+            // js에 html import 시 필요
+            // {
+            //     test: /\.html$/,
+            //     exclude: /node_modules/,
+            //     use: {loader: 'html-loader'}
+            // },
         ]
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: path.join(__dirname,'./app/index.html')
+            template: path.join(__dirname,'./app/fullscreen.html')
         }),
          // Copy Cesium Assets, Widgets, and Workers to a static directory
          new CopywebpackPlugin({ 
             patterns: [
                 { from: path.join(cesiumSource, cesiumWorkers), to: 'Workers' },
                 { from: path.join(cesiumSource, 'Assets'), to: 'Assets' },
-                { from: path.join(cesiumSource, 'Widgets'), to: 'Widgets' }
+                { from: path.join('./app/assets', 'icons'), to: 'Assets/Icons' },
+                { from: path.join(cesiumSource, 'Widgets'), to: 'Widgets' },
+                { from: path.join(cesiumSource, 'ThirdParty'), to: 'ThirdParty' } // drone 생성
             ]
         }),
         new webpack.DefinePlugin({
