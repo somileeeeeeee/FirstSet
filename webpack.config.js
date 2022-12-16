@@ -28,10 +28,6 @@ module.exports = {
     
     devServer: {
         static: './dist',
-        https: {
-            key: "./example.com+5-key.pem", // https 인증서
-            cert: "./example.com+5.pem"
-          }
     },
     module: {
         rules: [

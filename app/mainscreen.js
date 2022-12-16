@@ -1,5 +1,5 @@
 // ssomlee 2022.12.12 cesium 3D 추가
-import { Ion, Viewer, createWorldTerrain, createOsmBuildings, Cartesian3, Math, JulianDate, Color, SampledPositionProperty, IonResource, PathGraphics, VelocityOrientationProperty, TimeIntervalCollection, TimeInterval, ClockRange, PolygonHierarchy} from "cesium";
+import { Ion, Viewer, createWorldTerrain, createOsmBuildings, Cartesian3, Math, JulianDate, Color, SampledPositionProperty, IonResource, PathGraphics, VelocityOrientationProperty, TimeIntervalCollection, TimeInterval, ClockRange, PolygonHierarchy, PolylineGlowMaterialProperty, Transforms, HeadingPitchRange} from "cesium";
 import "cesium/Build/Cesium/Widgets/widgets.css";
 import "./css/style.css";
 
@@ -9,6 +9,12 @@ Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3NjJiN
 
 // Initialize the Cesium Viewer in the HTML element with the `cesiumContainer` ID.
 const viewer = new Viewer('cesiumContainer', {
+  selectionIndicator : false,
+  navigationHelpButton : false,
+  infoBox : false,
+  navigationInstructionsInitiallyVisible : false,
+  baseLayerPicker : true,
+  shouldAnimate : true, 
   terrainProvider: createWorldTerrain()
 });
 
@@ -51,13 +57,27 @@ viewer.scene.primitives.add(createOsmBuildings());
   const positionProperty = new SampledPositionProperty();
 //*/
 
-// 비행기 GPS 데이터 자리
-const flightData = JSON.parse(
-	'[{"longitude":127.037,"latitude":37.47,"height":60},{"longitude":127.049,"latitude":37.48,"height":60},{"longitude":127.049,"latitude":37.48,"height":60},{"longitude":127.048,"latitude":37.49,"height":60},{"longitude":127.048,"latitude":37.48,"height":60}]'
-  );
+///*	//ssomlee 2022.12.15 비행 루트 재설정 및 시간 설정
+let lon = 127.03653;
+let lat = 37.46958;
+// let height = 60;
+
+let flightData = [];
+for (let i=0; lon < 127.3; i += 0.001) {
+    lon += i
+    lat += i
+    
+    
+    // 객체생성
+    let flightdata = new Object();
+    flightdata.longitude = lon;
+    flightdata.latitude = lat;
+    flightdata.height = 200;
+
+    flightData.push(flightdata);
+}
 
 
-///*	//ssomlee 2022.12.14 비행 루트 재설정 및 시간 설정
 const timeStepInSeconds = 1;
 const totalSeconds = timeStepInSeconds * (flightData.length - 1);
 let start = JulianDate.now();
@@ -69,8 +89,10 @@ viewer.clock.stopTime = stop.clone();
 viewer.clock.currentTime = start.clone();
 viewer.clock.shouldAnimate = true;
 
+// timeline start, stop 시간으로 세팅
+viewer.timeline.zoomTo(start, stop);
 
-// 항공기 비행 루트(GPS) 설정
+// 항공기 비행 루트(추후 GPS) 설정
 const positionProperty = new SampledPositionProperty();
 
   for (let i = 0; i < flightData.length; i++) {
@@ -87,29 +109,78 @@ const positionProperty = new SampledPositionProperty();
 	viewer.entities.add({
 	  description: `Location: (${dataPoint.longitude}, ${dataPoint.latitude}, ${dataPoint.height})`,
 	  position: position,
-	  point: { pixelSize: 10, color: Color.RED }
+	  point: { 
+      pixelSize: 8, 
+      color: Color.TRANSPARENT,
+      outlineColor : Color.YELLOW, 
+      outlineWidth:3
+    }
 	});
   }
 //*/  
   
+
 // ssomlee 2022.12.13 드론 추가
-async function loadModel() {
-// Load the glTF model from Cesium ion.
-const airplaneUri = await IonResource.fromAssetId(1430196);
+
+// async function loadModel() {
+// // Load the glTF model from Cesium ion.
+// const airplaneUri = await IonResource.fromAssetId(1430196);
+// const airplaneEntity = viewer.entities.add({
+// 	availability: new TimeIntervalCollection([ new TimeInterval({ start: start, stop: stop }) ]),
+// 	position: positionProperty,
+// 	// Attach the 3D model instead of the green point.
+// 	model: { 
+//     uri: airplaneUri,
+//     minimumPixelSize: 80 
+//   },
+// 	// Automatically compute the orientation from the position.
+// 	orientation: new VelocityOrientationProperty(positionProperty),    
+// 	// path: new PathGraphics({ width: 3 })
+//   path: {
+//     resolution : 1,
+//     material : new PolylineGlowMaterialProperty({
+//       glowPower : 0.1,
+//       color : Color.white
+//     }),
+//     width : 10
+//   }
+// });
+
+// viewer.trackedEntity = airplaneEntity;
+// }
+
+// loadModel();
+//*/  
+
+// ssomlee 2022.12.16 드론 entity 수정 
 const airplaneEntity = viewer.entities.add({
+  // 시뮬레이션의 interval 시간이 동일해지도록
 	availability: new TimeIntervalCollection([ new TimeInterval({ start: start, stop: stop }) ]),
-	position: positionProperty,
+
+  position: positionProperty,
+
+  // Automatically compute the orientation from the position.
+	orientation: new VelocityOrientationProperty(positionProperty),   
+
 	// Attach the 3D model instead of the green point.
-	model: { uri: airplaneUri },
-	// Automatically compute the orientation from the position.
-	orientation: new VelocityOrientationProperty(positionProperty),    
-	path: new PathGraphics({ width: 3 })
+	model: { 
+    uri: './Assets/Icons/CesiumDrone.glb',
+    minimumPixelSize: 70 
+  },
+	 
+	// show the path as a white line in 1 sec increments
+  path: {
+    resolution : 1,
+    material : new PolylineGlowMaterialProperty({
+      glowPower : 0.1,
+      color : Color.white
+    }),
+    width : 10
+  }
 });
 
 viewer.trackedEntity = airplaneEntity;
-}
 
-loadModel();
 
 ///*	//oskim 2022.12.14 회랑 및 위험영역(원통) 표시
 const entities = viewer.entities;
@@ -152,4 +223,52 @@ entities.add({
     material: Color.MAGENTA.withAlpha(0.3),
   },
 });
+//*/
+
+
+///* // ssomlee 2022.12.15 드론 시점 변경 추가
+
+// 상공
+function skyview() {
+  viewer.trackedEntity = undefined;
+  viewer.zoomTo(
+    viewer.entities,
+    new HeadingPitchRange(0, Math.toRadians(-90))
+  );
+  
+}
+
+// HTML 요소 찾기
+const btn1 = document.querySelector('#test_skyview');
+
+// action
+btn1.addEventListener('click', skyview);
+
+
+// 측면
+function sideview() {
+  viewer.trackedEntity = undefined;
+  viewer.zoomTo(
+    viewer.entities,
+    new HeadingPitchRange(Math.toRadians(-90), Math.toRadians(-15), 7500)
+  );
+};
+
+// HTML 요소 찾기
+const btn2 = document.querySelector('#test_sideview');
+
+// action
+btn2.addEventListener('click', sideview);
+
+// 드론뷰
+function droneview() {
+  viewer.trackedEntity = airplaneEntity;
+}
+
+// HTML 요소 찾기
+const btn3 = document.querySelector('#test_droneview');
+
+// action
+btn3.addEventListener('click', droneview);
+
 //*/
