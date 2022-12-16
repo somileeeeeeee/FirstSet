@@ -40,3 +40,29 @@ function init(){
 }
 
 init();
+
+
+///*	//oskim 2022.12.14 openlayer 사용, 미니맵에 항로 그리기
+var points = [ [128.37, 36.17], [128.51, 36.17], [128.51, 35.91] ];
+
+for (var i = 0; i < points.length; i++) {
+    points[i] = ol.proj.transform(points[i], 'EPSG:4326', 'EPSG:3857');
+}
+
+var featureLine = new ol.Feature({
+    geometry: new ol.geom.LineString(points)
+});
+
+var vectorLine = new ol.source.Vector({});
+vectorLine.addFeature(featureLine);
+
+var vectorLineLayer = new ol.layer.Vector({
+    source: vectorLine,
+    style: new ol.style.Style({
+        fill: new ol.style.Fill({ color: '#00FF00', weight: 4 }),
+        stroke: new ol.style.Stroke({ color: '#00FF00', width: 2 })
+    })
+});
+
+map.addLayer(vectorLineLayer);
+//*/
